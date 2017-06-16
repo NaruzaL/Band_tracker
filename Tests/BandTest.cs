@@ -33,12 +33,31 @@ namespace BandTracker
     [Fact]
     public void Test_Save_ToBandDatabase()
     {
-      Band testBand = new Band("Nine Black Alps", "Post-grunge");
+      Band testBand = new Band("Nine Black Alps", "alt rock");
       testBand.Save();
 
       List<Band> result = Band.GetAll();
       List<Band> testList = new List<Band>{testBand};
       Assert.Equal(testList, result);
+    }
+
+    [Fact]
+    public void Test_Save_AssignsIdToObject()
+    {
+      Band testBand = new Band("Nirvana", "Grunge");
+      testBand.Save();
+      int testId = testBand.GetId();
+      int savedBandId = Band.GetAll()[0].GetId();
+      Assert.Equal(testId, savedBandId);
+    }
+
+    [Fact]
+    public void Test_Find_FindsBandsInDatabase()
+    {
+      Band testBand = new Band("Beatles", "Classic Rock");
+      testBand.Save();
+      Band foundBand = Band.Find(testBand.GetId());
+      Assert.Equal(testBand, foundBand);
     }
 
     public void Dispose()

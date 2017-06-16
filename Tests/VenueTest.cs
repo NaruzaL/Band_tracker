@@ -41,6 +41,25 @@ namespace BandTracker
       Assert.Equal(testList, result);
     }
 
+    [Fact]
+    public void Test_Save_AssignsIdToObject()
+    {
+      Venue testVenue = new Venue("Arlene Schnitzer Concert Hall", new DateTime(2017, 1, 1));
+      testVenue.Save();
+      int testId = testVenue.GetId();
+      int savedVenueId = Venue.GetAll()[0].GetId();
+      Assert.Equal(testId, savedVenueId);
+    }
+
+    [Fact]
+    public void Test_Find_FindsVenuesInDatabase()
+    {
+      Venue testVenue = new Venue("Columbia Gorge Ampatheater", new DateTime(2017, 1, 1));
+      testVenue.Save();
+      Venue foundVenue = Venue.Find(testVenue.GetId());
+      Assert.Equal(testVenue, foundVenue);
+    }
+
     public void Dispose()
     {
       Venue.DeleteAll();
