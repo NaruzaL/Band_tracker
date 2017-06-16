@@ -4,15 +4,15 @@ using System.Data.SqlClient;
 
 namespace BandTracker.Objects
 {
-  public class BandTracker
+  public class Venue
   {
-    private string name;
+    private string _name;
     private DateTime _concertDate;
-    private string id;
+    private int _id;
 
-    public Band(string Name, DateTime ConcertDate, int Id - 0)
+    public Venue(string Name, DateTime ConcertDate, int Id = 0)
     {
-      _name = name;
+      _name = Name;
       _concertDate = ConcertDate;
       _id = Id;
     }
@@ -21,7 +21,7 @@ namespace BandTracker.Objects
     {
       return _name;
     }
-    public string GetConcertDate()
+    public DateTime GetConcertDate()
     {
       return _concertDate;
     }
@@ -30,18 +30,18 @@ namespace BandTracker.Objects
       return _id;
     }
 
-    public override bool Equals(System.Object otherBand)
+    public override bool Equals(System.Object otherVenue)
     {
-      if (!(otherBand is Band))
+      if (!(otherVenue is Venue))
       {
         return false;
       }
       else
       {
-        Band newBand = (Band) otherBand;
-        bool idEquality = (this.GetId() == newBand.GetId());
-        bool nameEquality = (this.GetName() == newBand.GetName());
-        bool concertDateEquality = (this.GetConcertDate() == newBand.GetConcertDate());
+        Venue newVenue = (Venue) otherVenue;
+        bool idEquality = (this.GetId() == newVenue.GetId());
+        bool nameEquality = (this.GetName() == newVenue.GetName());
+        bool concertDateEquality = (this.GetConcertDate() == newVenue.GetConcertDate());
         return (idEquality && nameEquality && concertDateEquality);
       }
     }
@@ -55,5 +55,33 @@ namespace BandTracker.Objects
       conn.Close();
     }
 
+    public static List<Venue> GetAll()
+    {
+      List<Venue> allVenues = new List<Venue>{};
+
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM venues;", conn);
+      SqlDataReader rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        int venueId = rdr.GetInt32(0);
+        string venueName = rdr.GetString(1);
+        DateTime venueConcertDate = rdr.GetDateTime(2);
+        Venue newVenue = new Venue(venueName, venueConcertDate, venueId);
+        allVenues.Add(newVenue);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return allVenues;
+    }
   }
 }

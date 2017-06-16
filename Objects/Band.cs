@@ -4,15 +4,15 @@ using System.Data.SqlClient;
 
 namespace BandTracker.Objects
 {
-  public class BandTracker
+  public class Band
   {
-    private string name;
-    private string genre;
-    private string id;
+    private string _name;
+    private string _genre;
+    private int _id;
 
-    public Band(string Name, string Genre, int Id - 0)
+    public Band(string Name, string Genre, int Id = 0)
     {
-      _name = name;
+      _name = Name;
       _genre = Genre;
       _id = Id;
     }
@@ -53,6 +53,35 @@ namespace BandTracker.Objects
       SqlCommand cmd = new SqlCommand("DELETE FROM bands;", conn);
       cmd.ExecuteNonQuery();
       conn.Close();
+    }
+
+    public static List<Band> GetAll()
+    {
+      List<Band> allBands = new List<Band>{};
+
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM bands;", conn);
+      SqlDataReader rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        int bandId = rdr.GetInt32(0);
+        string bandName = rdr.GetString(1);
+        string bandGenre = rdr.GetString(2);
+        Band newBand = new Band(bandName, bandGenre, bandId);
+        allBands.Add(newBand);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return allBands;
     }
 
   }

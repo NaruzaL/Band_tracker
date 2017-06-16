@@ -29,5 +29,11 @@ namespace BandTracker
       Venue secondVenue = new Venue("Roseland", new DateTime(2017,6,17));
       Assert.Equal(firstVenue, secondVenue);
     }
+
+    public void Dispose()
+    {
+      Venue.DeleteAll();
+      Band.DeleteAll();
+    }
   }
 }

@@ -29,5 +29,11 @@ namespace BandTracker
       Band secondBand = new Band("Rage Against the Machine", "alternative");
       Assert.Equal(firstBand, secondBand);
     }
+
+    public void Dispose()
+    {
+      Band.DeleteAll();
+      Venue.DeleteAll();
+    }
   }
 }
