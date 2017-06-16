@@ -2,10 +2,14 @@
   Layout="Shared/_Layout.cshtml";
 }
 
-<h2>Band Tracker app</h2>
 
-<div class="row" id="bands">
+<div class="row" id="index">
   <div class="col-md-6">
+    <h3>Bands</h3>
+    @if (@Model["bands"].Count == 0)
+    {
+      <p>No bands to display</p>
+    }
     <ul>
       @foreach(var band in @Model["bands"])
       {
@@ -13,13 +17,16 @@
       }
     </ul>
   </div>
-</div>
-<div class="row" id="venues">
   <div class="col-md-6">
+    <h3>Venues</h3>
+    @if (@Model["venues"].Count == 0)
+    {
+      <p>No venues to display</p>
+    }
     <ul>
       @foreach(var venue in @Model["venues"])
       {
-        <li><a href="/venue/@band.GetId()">@venue.GetName</a></li>
+        <li><a href="/venue/@venue.GetId()">@venue.GetName()</a></li>
       }
     </ul>
   </div>

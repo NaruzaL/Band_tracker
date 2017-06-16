@@ -17,7 +17,7 @@ namespace BandTracker
         List<Venue> allVenues = Venue.GetAll();
         model.Add("bands", allBands);
         model.Add("venues", allVenues);
-        return View["index.cshtml"];
+        return View["index.cshtml", model];
       };
 
       Get["/band/add"] = _ =>View["band_form"];
@@ -28,11 +28,33 @@ namespace BandTracker
 
       Get["/venue/add"] = _ =>View["venue_form"];
       Post["/venue/new"] = _ => {
-        Venue newVenue = new Venue(Request.Form["name"]);
+        DateTime defaultDt = new DateTime(9999,1,1);
+        Venue newVenue = new Venue(Request.Form["name"], defaultDt);
         return View["success.cshtml", newVenue];
       };
 
-      Get["/band/{id}"]
+      Get["/band/{id}"] = parameters => {
+        Band selectedBand = Band.Find(parameters.id);
+        return View["bands.cshtml", selectedBand];
+      };
+
+      // Post["/band/new"] = parameters => {
+      //   Band selectedBand = Band.Find(parameters.id);
+      //   selectedBand.AddVenue(Request.Form["name"], Request.Form["concertDate"]);
+      //   return View["success.cshtml"];
+      // };
+      //
+      Get["/venue/{id}"] = parameters => {
+        Venue selectedVenue = Venue.Find(parameters.id);
+        return View["venues.cshtml", selectedVenue];
+      };
+
+      // Post["/venue/new"] = parameters => {
+      //   Venue selectedVenue = Venue.Find(parameters.id);
+      //   selectedVenue.AddBand(Request.Form["name"], Request.Form["genre"]);
+      //   return View["success.cshtml"];
+      // };
+
     }
   }
 }
