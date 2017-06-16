@@ -1,0 +1,26 @@
+@{
+  Layout="Shared/_Layout.cshtml";
+}
+
+<h2>Band Tracker app</h2>
+
+<div class="row" id="bands">
+  <div class="col-md-6">
+    <ul>
+      @foreach(var band in @Model["bands"])
+      {
+        <li><a href="/band/@band.GetId()">@band.GetName()</a></li>
+      }
+    </ul>
+  </div>
+</div>
+<div class="row" id="venues">
+  <div class="col-md-6">
+    <ul>
+      @foreach(var venue in @Model["venues"])
+      {
+        <li><a href="/venue/@band.GetId()">@venue.GetName</a></li>
+      }
+    </ul>
+  </div>
+</div>
