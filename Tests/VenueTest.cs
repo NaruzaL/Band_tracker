@@ -98,6 +98,42 @@ namespace BandTracker
       Assert.Equal(testBandList, resultBandList);
     }
 
+    [Fact]
+    public void Test_Update_UpdatesVenueInDatabase()
+    {
+      string name = "Rosland";
+      DateTime concertDate = new DateTime(2016,5,2);
+      int id = 1;
+      Venue testVenue = new Venue(name, concertDate, id);
+      testVenue.Save();
+      string newName = "Roseland";
+      testVenue.Update(newName);
+      string result = testVenue.GetName();
+
+      Assert.Equal(newName, result);
+    }
+
+    [Fact]
+    public void Test_Delete_DeletesVenueFromDatabase()
+    {
+      string name1 = "Rosland";
+      DateTime concertDate1 = new DateTime(2016,5,2);
+      int id = 1;
+      Venue testVenue1 = new Venue(name1, concertDate1, id);
+      testVenue1.Save();
+      string name2 = "Roseland";
+      DateTime concertDate2 = new DateTime(2015,8,1);
+      int id2 = 2;
+      Venue testVenue2 = new Venue(name2, concertDate2, id2);
+      testVenue2.Save();
+
+      testVenue1.Delete();
+      List<Venue> resultVenue = Venue.GetAll();
+      List<Venue> testVenueList = new List<Venue> {testVenue2};
+
+      Assert.Equal(testVenueList, resultVenue);
+    }
+
     public void Dispose()
     {
       Venue.DeleteAll();
