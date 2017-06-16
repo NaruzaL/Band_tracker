@@ -30,6 +30,17 @@ namespace BandTracker
       Assert.Equal(firstBand, secondBand);
     }
 
+    [Fact]
+    public void Test_Save_ToBandDatabase()
+    {
+      Band testBand = new Band("Nine Black Alps", "Post-grunge");
+      testBand.Save();
+
+      List<Band> result = Band.GetAll();
+      List<Band> testList = new List<Band>{testBand};
+      Assert.Equal(testList, result);
+    }
+
     public void Dispose()
     {
       Band.DeleteAll();

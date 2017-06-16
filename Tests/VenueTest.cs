@@ -30,6 +30,17 @@ namespace BandTracker
       Assert.Equal(firstVenue, secondVenue);
     }
 
+    [Fact]
+    public void Test_Save_ToVenueDatabase()
+    {
+      Venue testVenue = new Venue("Powell's books", new DateTime(2011,4,17));
+      testVenue.Save();
+
+      List<Venue> result = Venue.GetAll();
+      List<Venue> testList = new List<Venue>{testVenue};
+      Assert.Equal(testList, result);
+    }
+
     public void Dispose()
     {
       Venue.DeleteAll();
