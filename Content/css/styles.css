@@ -23,6 +23,7 @@ form {
 body {
   background-image: url(../img/background.png);
   background-size: cover;
+  background-repeat: repeat-x;
   opacity: 1;
 }
 

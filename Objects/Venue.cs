@@ -30,6 +30,40 @@ namespace BandTracker.Objects
       return _id;
     }
 
+    public void SetConcertDate(DateTime newConcertDate)
+   {
+     SqlConnection conn = DB.Connection();
+     conn.Open();
+
+     SqlCommand cmd = new SqlCommand("UPDATE venues SET concert_date = @NewConcertDate OUTPUT INSERTED.concert_date WHERE id = @VenueId;", conn);
+
+     SqlParameter newConcertDateParameter = new SqlParameter();
+     newConcertDateParameter.ParameterName = "@NewConcertDate";
+     newConcertDateParameter.Value = newConcertDate;
+     cmd.Parameters.Add(newConcertDateParameter);
+
+     SqlParameter venueIdParameter = new SqlParameter();
+     venueIdParameter.ParameterName = "@VenueId";
+     venueIdParameter.Value = this.GetId();
+     cmd.Parameters.Add(venueIdParameter);
+     SqlDataReader rdr = cmd.ExecuteReader();
+
+     while(rdr.Read())
+     {
+       this._name = rdr.GetString(0);
+     }
+
+     if (rdr != null)
+     {
+       rdr.Close();
+     }
+
+     if (conn != null)
+     {
+       conn.Close();
+     }
+   }
+
     public override bool Equals(System.Object otherVenue)
     {
       if (!(otherVenue is Venue))

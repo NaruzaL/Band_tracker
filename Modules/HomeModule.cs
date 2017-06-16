@@ -23,6 +23,7 @@ namespace BandTracker
       Get["/band/add"] = _ =>View["band_form"];
       Post["/band/new"] = _ => {
         Band newBand = new Band(Request.Form["name"], Request.Form["genre"]);
+        newBand.Save();
         return View["success.cshtml", newBand];
       };
 
@@ -30,30 +31,45 @@ namespace BandTracker
       Post["/venue/new"] = _ => {
         DateTime defaultDt = new DateTime(9999,1,1);
         Venue newVenue = new Venue(Request.Form["name"], defaultDt);
+        newVenue.Save();
         return View["success.cshtml", newVenue];
       };
 
       Get["/band/{id}"] = parameters => {
+        Dictionary<string,object> model = new Dictionary<string,object>{};
         Band selectedBand = Band.Find(parameters.id);
-        return View["bands.cshtml", selectedBand];
+        List<Venue> bandVenues = selectedBand.GetVenues();
+        List<Venue> allVenues = Venue.GetAll();
+        model.Add("bands", selectedBand);
+        model.Add("bandVenues", bandVenues);
+        model.Add("allVenues", allVenues);
+        return View["bands.cshtml", model];
       };
 
-      // Post["/band/new"] = parameters => {
-      //   Band selectedBand = Band.Find(parameters.id);
-      //   selectedBand.AddVenue(Request.Form["name"], Request.Form["concertDate"]);
-      //   return View["success.cshtml"];
-      // };
-      //
+      Post["/band/add_venue"] = _ => {
+        Band selectedBand = Band.Find(Request.Form["band-id"]);
+        Venue addedVenue = Venue.Find(Request.Form["venue-id"]);
+        selectedBand.AddVenue(addedVenue);
+        return View["success.cshtml"];
+      };
+
       Get["/venue/{id}"] = parameters => {
+        Dictionary<string,object> model = new Dictionary<string,object>{};
         Venue selectedVenue = Venue.Find(parameters.id);
+        List<Band> venueBands = selectedVenue.GetBands();
+        List<Band> allBands = Band.GetAll();
+        model.Add("venues", selectedVenue);
+        model.Add("venueBands", venueBands);
+        model.Add("allBands", allBands);
         return View["venues.cshtml", selectedVenue];
       };
 
-      // Post["/venue/new"] = parameters => {
-      //   Venue selectedVenue = Venue.Find(parameters.id);
-      //   selectedVenue.AddBand(Request.Form["name"], Request.Form["genre"]);
-      //   return View["success.cshtml"];
-      // };
+      Post["/venue/add_band"] = _ => {
+        Venue selectedVenue = Venue.Find(Request.Form["venue-id"]);
+        Band addedBand = Band.Find(Request.Form["band-id"]);
+        selectedVenue.AddBand(addedBand);
+        return View["success.cshtml"];
+      };
 
     }
   }
