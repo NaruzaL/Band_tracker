@@ -199,8 +199,7 @@ namespace BandTracker.Objects
         {
           int VenueId = rdr.GetInt32(0);
           string venueName = rdr.GetString(1);
-          DateTime venueConcertDate = rdr.GetDateTime(2);
-          Venue foundVenue = new Venue(venueName, venueConcertDate, VenueId);
+          Venue foundVenue = new Venue(venueName, VenueId);
           venues.Add(foundVenue);
         }
         if (rdr != null)

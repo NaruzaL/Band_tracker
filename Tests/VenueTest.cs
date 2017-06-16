@@ -25,15 +25,15 @@ namespace BandTracker
     [Fact]
     public void Test_Equal_ReturnsTrueIfVenuesAreTheSame()
     {
-      Venue firstVenue = new Venue("Roseland", new DateTime(2017,6,17));
-      Venue secondVenue = new Venue("Roseland", new DateTime(2017,6,17));
+      Venue firstVenue = new Venue("Roseland");
+      Venue secondVenue = new Venue("Roseland");
       Assert.Equal(firstVenue, secondVenue);
     }
 
     [Fact]
     public void Test_Save_ToVenueDatabase()
     {
-      Venue testVenue = new Venue("Powell's books", new DateTime(2011,4,17));
+      Venue testVenue = new Venue("Powell's books");
       testVenue.Save();
 
       List<Venue> result = Venue.GetAll();
@@ -44,7 +44,7 @@ namespace BandTracker
     [Fact]
     public void Test_Save_AssignsIdToObject()
     {
-      Venue testVenue = new Venue("Arlene Schnitzer Concert Hall", new DateTime(2017, 1, 1));
+      Venue testVenue = new Venue("Arlene Schnitzer Concert Hall");
       testVenue.Save();
       int testId = testVenue.GetId();
       int savedVenueId = Venue.GetAll()[0].GetId();
@@ -54,7 +54,7 @@ namespace BandTracker
     [Fact]
     public void Test_Find_FindsVenuesInDatabase()
     {
-      Venue testVenue = new Venue("Columbia Gorge Ampatheater", new DateTime(2017, 1, 1));
+      Venue testVenue = new Venue("Columbia Gorge Ampatheater");
       testVenue.Save();
       Venue foundVenue = Venue.Find(testVenue.GetId());
       Assert.Equal(testVenue, foundVenue);
@@ -64,7 +64,7 @@ namespace BandTracker
     public void Test_AddBand_AddsBandToVenue()
     {
 
-      Venue testVenue = new Venue("Roseland", new DateTime(2011, 1 , 1), 1);
+      Venue testVenue = new Venue("Roseland",1);
       testVenue.Save();
 
       Band testBand = new Band("Sevendust", "Heavy Metal");
@@ -82,7 +82,7 @@ namespace BandTracker
     [Fact]
     public void Test_GetBand_RetrievesAllBandWithVenue()
     {
-      Venue testVenue = new Venue("Rose Gardenk", new DateTime(2008, 12, 4));
+      Venue testVenue = new Venue("Rose Gardenk");
       testVenue.Save();
 
       Band firstBand = new Band("Evercleaer", "Rock");
@@ -102,9 +102,8 @@ namespace BandTracker
     public void Test_Update_UpdatesVenueInDatabase()
     {
       string name = "Rosland";
-      DateTime concertDate = new DateTime(2016,5,2);
       int id = 1;
-      Venue testVenue = new Venue(name, concertDate, id);
+      Venue testVenue = new Venue(name, id);
       testVenue.Save();
       string newName = "Roseland";
       testVenue.Update(newName);
@@ -117,14 +116,12 @@ namespace BandTracker
     public void Test_Delete_DeletesVenueFromDatabase()
     {
       string name1 = "Rosland";
-      DateTime concertDate1 = new DateTime(2016,5,2);
       int id = 1;
-      Venue testVenue1 = new Venue(name1, concertDate1, id);
+      Venue testVenue1 = new Venue(name1, id);
       testVenue1.Save();
       string name2 = "Roseland";
-      DateTime concertDate2 = new DateTime(2015,8,1);
       int id2 = 2;
-      Venue testVenue2 = new Venue(name2, concertDate2, id2);
+      Venue testVenue2 = new Venue(name2, id2);
       testVenue2.Save();
 
       testVenue1.Delete();

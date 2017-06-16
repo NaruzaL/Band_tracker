@@ -1,0 +1,13 @@
+@{
+  Layout="Shared/_Layout.cshtml";
+}
+<div id = "edy">
+
+<h2>Edit @Model.GetName()</h2>
+  <form action="/venue/edit/@Model.GetId()" method="post">
+    <input type="hidden" name="_method" value="PATCH">
+    <input name="venue-id" type="hidden" value="@Model.GetId()">
+    <input id="venueName" name="venueName" type="text" placeholder="new name">
+    <button type="submit">Submit</button>
+  </form>
+</div>

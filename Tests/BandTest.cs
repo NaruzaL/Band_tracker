@@ -66,9 +66,9 @@ namespace BandTracker
       Band testBand = new Band("Them Crooked Vultures", "Hard Rock");
       testBand.Save();
 
-      Venue testVenue = new Venue("Roseland", new DateTime(2011, 1 , 1));
+      Venue testVenue = new Venue("Roseland");
       testVenue.Save();
-      Venue testVenue2 = new Venue("Columbia Gorge Ampatheater", new DateTime(2017, 1, 1));
+      Venue testVenue2 = new Venue("Columbia Gorge Ampatheater");
       testVenue2.Save();
 
       testBand.AddVenue(testVenue);

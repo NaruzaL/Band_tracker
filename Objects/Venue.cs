@@ -7,13 +7,11 @@ namespace BandTracker.Objects
   public class Venue
   {
     private string _name;
-    private DateTime _concertDate;
     private int _id;
 
-    public Venue(string Name, DateTime ConcertDate, int Id = 0)
+    public Venue(string Name, int Id = 0)
     {
       _name = Name;
-      _concertDate = ConcertDate;
       _id = Id;
     }
 
@@ -21,48 +19,11 @@ namespace BandTracker.Objects
     {
       return _name;
     }
-    public DateTime GetConcertDate()
-    {
-      return _concertDate;
-    }
     public int GetId()
     {
       return _id;
     }
 
-    public void SetConcertDate(DateTime newConcertDate)
-   {
-     SqlConnection conn = DB.Connection();
-     conn.Open();
-
-     SqlCommand cmd = new SqlCommand("UPDATE venues SET concert_date = @NewConcertDate OUTPUT INSERTED.concert_date WHERE id = @VenueId;", conn);
-
-     SqlParameter newConcertDateParameter = new SqlParameter();
-     newConcertDateParameter.ParameterName = "@NewConcertDate";
-     newConcertDateParameter.Value = newConcertDate;
-     cmd.Parameters.Add(newConcertDateParameter);
-
-     SqlParameter venueIdParameter = new SqlParameter();
-     venueIdParameter.ParameterName = "@VenueId";
-     venueIdParameter.Value = this.GetId();
-     cmd.Parameters.Add(venueIdParameter);
-     SqlDataReader rdr = cmd.ExecuteReader();
-
-     while(rdr.Read())
-     {
-       this._name = rdr.GetString(0);
-     }
-
-     if (rdr != null)
-     {
-       rdr.Close();
-     }
-
-     if (conn != null)
-     {
-       conn.Close();
-     }
-   }
 
     public override bool Equals(System.Object otherVenue)
     {
@@ -75,8 +36,7 @@ namespace BandTracker.Objects
         Venue newVenue = (Venue) otherVenue;
         bool idEquality = (this.GetId() == newVenue.GetId());
         bool nameEquality = (this.GetName() == newVenue.GetName());
-        bool concertDateEquality = (this.GetConcertDate() == newVenue.GetConcertDate());
-        return (idEquality && nameEquality && concertDateEquality);
+        return (idEquality && nameEquality);
       }
     }
 
@@ -122,8 +82,7 @@ namespace BandTracker.Objects
       {
         int venueId = rdr.GetInt32(0);
         string venueName = rdr.GetString(1);
-        DateTime venueConcertDate = rdr.GetDateTime(2);
-        Venue newVenue = new Venue(venueName, venueConcertDate, venueId);
+        Venue newVenue = new Venue(venueName, venueId);
         allVenues.Add(newVenue);
       }
       if (rdr != null)
@@ -142,18 +101,13 @@ namespace BandTracker.Objects
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO venues (name, concert_date) OUTPUT INSERTED.id VALUES (@VenuesName, @VenuesConcertDate)", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO venues (name) OUTPUT INSERTED.id VALUES (@VenuesName)", conn);
 
       SqlParameter nameParameter = new SqlParameter();
       nameParameter.ParameterName = "@VenuesName";
       nameParameter.Value = this.GetName();
 
-      SqlParameter concertDateParameter = new SqlParameter();
-      concertDateParameter.ParameterName = "@VenuesConcertDate";
-      concertDateParameter.Value = this.GetConcertDate();
-
       cmd.Parameters.Add(nameParameter);
-      cmd.Parameters.Add(concertDateParameter);
 
       SqlDataReader rdr = cmd.ExecuteReader();
 
@@ -219,15 +173,13 @@ namespace BandTracker.Objects
 
       int foundVenueId = 0;
       string foundVenueName = null;
-      DateTime foundVenueConcertDate = default(DateTime);
 
       while(rdr.Read())
       {
         foundVenueId = rdr.GetInt32(0);
         foundVenueName = rdr.GetString(1);
-        foundVenueConcertDate = rdr.GetDateTime(2);
       }
-      Venue foundVenue = new Venue(foundVenueName, foundVenueConcertDate, foundVenueId);
+      Venue foundVenue = new Venue(foundVenueName, foundVenueId);
 
       if (rdr != null)
      {
