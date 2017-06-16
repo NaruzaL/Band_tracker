@@ -60,6 +60,24 @@ namespace BandTracker
       Assert.Equal(testBand, foundBand);
     }
 
+    [Fact]
+    public void Test_AddVenue_AddsVenueToVenue()
+    {
+      Band testBand = new Band("Them Crooked Vultures", "Hard Rock");
+      testBand.Save();
+
+      Venue testVenue = new Venue("Roseland", new DateTime(2011, 1 , 1));
+      testVenue.Save();
+      Venue testVenue2 = new Venue("Columbia Gorge Ampatheater", new DateTime(2017, 1, 1));
+      testVenue2.Save();
+
+      testBand.AddVenue(testVenue);
+      testBand.AddVenue(testVenue2);
+      List<Venue> result = testBand.GetVenues();
+      List<Venue> testList = new List<Venue>{testVenue, testVenue2};
+      Assert.Equal(testList, result);
+    }
+
     public void Dispose()
     {
       Band.DeleteAll();
